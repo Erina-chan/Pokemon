@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Treinador {
 
 	String nome;
+	boolean perdeu = false;
 	Pokemon[] pokebola = new Pokemon[6];
 
 	public Treinador(String nome, int numPokemons) {
@@ -40,6 +41,7 @@ public class Treinador {
 	}
 
 	public void ataca(Treinador outro) {
+		//TODO temos que completar isso!
 		Pokemon atacante;
 		Pokemon atacado;
 		for (int i = 0; i < 6; i++) {
@@ -53,4 +55,13 @@ public class Treinador {
 		}
 	}
 	
+	public void perdeu() {
+		boolean possibilidadePerdeu = true;
+		for(int i = 0; i < 6; i++) {
+			if (pokebola[i].ativo == true) {
+				possibilidadePerdeu = false;
+			}
+		}
+		this.perdeu = possibilidadePerdeu;
+	}
 }
