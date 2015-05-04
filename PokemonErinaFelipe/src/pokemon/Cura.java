@@ -10,7 +10,7 @@ public class Cura implements Evento {
 		System.out.print("Digite o numero do pokemon que voce quer curar: ");
 		int num = sc.nextInt() - 1;
 		t.cura(t.pokebola[num]);
-		System.out.println("O pokemon foi curado.");
+		System.out.println(t.pokebola[num].nome + " foi curado.");
 	}
 	
 	public static void imprimePokemons(Treinador t) {
