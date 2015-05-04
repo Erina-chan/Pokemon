@@ -28,8 +28,29 @@ public class Treinador {
 			}
 			
 		}
-		//sc.close();
 	}
+	
+	public Treinador(String nome) {
+		this.nome = nome;
+			
+		int numPoke = (int) Math.random() * 10; // Vezes 10 porque temos 10 pokemons. A funcao gera numeros de 0 a 1
+		int atq1 = (int) Math.random() * 10;
+		int atq2 = (int) Math.random() * 10;
+		int atq3 = (int) Math.random() * 10;
+		int atq4 = (int) Math.random() * 10;
+			
+		this.pokebola[0] = new Pokemon(numPoke,atq1,atq2,atq3,atq4);
+		this.pokebola[0].ativo = true;
+		this.pAtivo = this.pokebola[0];
+	}
+	
+	public Treinador(String nome, String inutil){
+		this.nome = nome;
+		this.pokebola[0] = new Pokemon(nome);
+		this.pokebola[0].ativo = true;
+		this.pAtivo = this.pokebola[0];
+	}
+	
 	
 	public void fugir() {
 		this.perdeu = true;

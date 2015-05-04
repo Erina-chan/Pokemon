@@ -89,7 +89,6 @@ public class Pokemon {
 			this.tipoPokemon = "metal";
 		}
 		else if (num == 5) {
-			this.nome = "Magno";
 			this.tipoPokemon = "choque";
 		}
 		else if (num == 6) {
@@ -119,6 +118,12 @@ public class Pokemon {
 		this.ataques[3] = new Ataque(atq4);
 	}
 
+	public Pokemon(String nome){ // SOMENTE PARA USAR NO JUNIT
+		this.nome = nome;
+		this.ataques[0] = new Ataque(1);
+		this.tipoPokemon = "agua";
+	}
+	
 	public static void mostraPokemons() {
 		System.out.println("\nPokemons disponiveis: ");
 		System.out.println("1. Goldman - fogo");
