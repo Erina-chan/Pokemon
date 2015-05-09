@@ -11,8 +11,8 @@ public class TestaTreinador {
 	
 	@Before
 	public void setUp() {
-		t1 = new Treinador("Felipe", "inutil");
-		t2 = new Treinador("Erina", "inutil");
+		t1 = new Treinador("Felipe", "teste");
+		t2 = new Treinador("Erina", "teste");
 	}
 	
 	@Test
