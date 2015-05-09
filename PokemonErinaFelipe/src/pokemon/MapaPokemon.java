@@ -11,9 +11,13 @@ public class MapaPokemon {
 		int opcao1;
 		int opcao2;
 		double pivo;
+		Rodada rodada = new Rodada();
 		Evento ev1;
 		Evento ev2;
-
+		
+		MP3 mp3 = new MP3("Pokemon Theme.mp3");
+		mp3.play();
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Treinador");
 		System.out.print("Digite seu nome: ");
@@ -22,7 +26,7 @@ public class MapaPokemon {
 		int numPokemons = sc.nextInt();
 
 		Treinador t1 = new Treinador(nome, numPokemons);
-		Treinador t2 = new Treinador("Pokemon Selvagem");
+		Treinador t2 = new Treinador("Pokemon");
 
 		while (batalhou == false) {
 			System.out.println();
@@ -30,14 +34,19 @@ public class MapaPokemon {
 			System.out.println("Digite 2 para andar sobre um chao gramado ");
 			System.out.println("Digite 3 para desistir ");
 			escolha = sc.nextInt();
-
+			
+			delay(1000);
+			
 			if (escolha == 2) {
-				// Aqui foi definido que a chance de encontrar um pokemon sera
-				// de 50%
+				// Aqui foi definido que a chance de encontrar um pokemon sera de 50 %
 
 				if (Math.random() * 100 > 50) {
-					
+					mp3.close();
+					mp3 = new MP3("Pokemon Battle Theme.mp3");
+					delay(1000);
 					System.out.println("Um pokemon selvagem foi encontrado!!!");
+					mp3.play();
+					delay(3000);
 
 					while (t1.perdeu == false && t2.perdeu == false) {
 
@@ -57,92 +66,49 @@ public class MapaPokemon {
 							opcao2 = 6;
 						else
 							opcao2 = 7;
-
-						// Comparar as prioridades dos eventos
 						
-						if (opcao1 == 0){
-							
-							ev2 = BatalhaPokemon.retornaEvento(opcao2);
-							
-							t1.captura(t2);
-							if (t2.perdeu == true)
-								break;
-							
-							((Ataca) ev2).acao(t2, t1, opcao2);
-
-							t1.perdeu();
-							if (t1.perdeu == true)
-								break;	
-			
+						ev1 = BatalhaPokemon.retornaEvento(opcao1,t1,t2);
+						ev2 = BatalhaPokemon.retornaEvento(opcao2,t2,t1);
 						
-							
-						}
-						else if (opcao1 <= opcao2) { // O treinador faz sua rodada
-												// primeiro
-
-							ev1 = BatalhaPokemon.retornaEvento(opcao1);
-							ev2 = BatalhaPokemon.retornaEvento(opcao2);
-
-							if (opcao1 > 3) {
-								((Ataca) ev1).acao(t1, t2, opcao1);
-								
-								t2.perdeu();
-								if (t2.perdeu == true)
-									break;
-							}
-							else {
-								ev1.acao(t1);
-								if (t1.perdeu == true)
-									break;
-							}
-
-							((Ataca) ev2).acao(t2, t1, opcao2);
-
-							t1.perdeu();
-							if (t1.perdeu == true)
-								break;
-
-						}
-
-						else { // O pokemon faz sua rodada primeiro
-
-							ev1 = BatalhaPokemon.retornaEvento(opcao2);
-							ev2 = BatalhaPokemon.retornaEvento(opcao1);
-
-							((Ataca) ev1).acao(t2, t1, opcao2);
-
-							t1.perdeu();
-							if (t1.perdeu == true)
-								break;
-
-							if (opcao1 > 3)
-								((Ataca) ev2).acao(t1, t2, opcao1);
-							else
-								ev2.acao(t1);
-
-							t2.perdeu();
-							if (t2.perdeu == true)
-								break;
-						}
+						rodada.addEvent(ev1);
+						rodada.addEvent(ev2);
+						rodada.run();
+						
+						
 					}
-
 					batalhou = true;
-				} else
-					System.out
-							.println("Nenhum pokemon foi encontrado na grama");
+				}
+					
+				else
+					System.out.println("Nenhum pokemon foi encontrado na grama");
 			}
 
 			else if (escolha == 3)
 				batalhou = true; // Vamos considerar que ele batalhou pra sair
-									// do laço
+									// do laco
 
 			else
 				System.out.println("Nenhum pokemon foi encontrado");
 
 		}
 		sc.close();
+		
+		delay(1000);
+		mp3.close();
+		
+		System.out.println();
+		//Cura.imprimePokemons(t1);
+		
 		System.out.println();
 		System.out.println("A simulacao acabou!");
+	}
+	
+	public static void delay(int tempo){ 
+		try {  
+			   Thread.sleep(tempo);  
+			} catch (Exception e) {  
+			   e.printStackTrace();  
+			} 
 	}
 
 }
