@@ -1,11 +1,14 @@
 package pokemon;
 
-public class Ataca implements Evento{
+public class Ataca extends Evento{
 
-	public void acao(Treinador t) {
+	public Ataca(int prioridade, Treinador ator, Treinador outro) {
+		super(prioridade, ator, outro);
+	}
+
+	public void acao() {
+		if (this.ator.perdeu == false && this.outro.perdeu == false)
+			this.ator.ataca(this.outro,this.prioridade);
 	}
 	
-	public void acao(Treinador t1, Treinador t2, int opcao) {
-		t1.ataca(t2,opcao);
-	}
 }
