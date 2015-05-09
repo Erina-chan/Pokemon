@@ -5,7 +5,14 @@ import java.util.Scanner;
 public class BatalhaPokemon {
 	
 	public static void main(String[] args) {
-
+		
+		Rodada rodada = new Rodada();
+		Evento ev1;
+		Evento ev2;		
+		MP3 mp3 = new MP3("Pokemon Theme.mp3");
+		
+		mp3.play();
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Treinador 1:");
 		System.out.print("Digite seu nome: ");
@@ -15,18 +22,23 @@ public class BatalhaPokemon {
 		
 		Treinador t1 = new Treinador(nome, numPokemons);
 		
+		System.out.println("");
 		System.out.println("Treinador 2:");
 		System.out.print("Digite seu nome: ");
 		sc.nextLine(); // para eliminar problemas com o buffer
 		String nome2 = sc.nextLine();
-		sc.nextLine();
+		System.out.print("Aperte ENTER para continuar: ");
+		sc.nextLine();	
 		System.out.print("Digite seu numero de pokemons (1 <= n <= 6): ");
 		int numPokemons2 = sc.nextInt();
 		
 		Treinador t2 = new Treinador(nome2, numPokemons2);
-		
-		Evento ev1;
-		Evento ev2;
+
+		System.out.print("A batalha vai come�ar!");
+		mp3.close();
+		mp3 = new MP3("Pokemon Battle Theme.mp3");
+		mp3.play();
+		delay(2000);
 		
 		while(t1.perdeu == false && t2.perdeu == false){
 			
@@ -34,94 +46,35 @@ public class BatalhaPokemon {
 			System.out.println(t1.nome);
 			mostraOpcoes(t1);
 			int opcao1 = sc.nextInt();
+			delay(500);
 			
 			System.out.println(t2.nome);
 			mostraOpcoes(t2);
 			int opcao2 = sc.nextInt();
+			delay(500);
 			
-			
-			// Comparar as prioridades dos eventos
-			if (opcao1 <= opcao2){
-				ev1 = retornaEvento(opcao1);
-				ev2 = retornaEvento(opcao2);
-				
-				if (opcao1 > 3) { // Ambas as acoes sao ataques
-					((Ataca)ev1).acao(t1, t2,opcao1);
-					t2.perdeu();
-					
-					if (t2.perdeu == true) 
-						break;
-					
-					((Ataca)ev2).acao(t2, t1,opcao2);
-					t1.perdeu();
 
-					
-				}
-				else { // opcao1 < 3
-					
-					if(opcao2 > 3){
-						ev1.acao(t1);
-						if (t1.perdeu == true) 
-							break;
-						((Ataca)ev2).acao(t2, t1,opcao2);
-						t2.perdeu();
-						
-					}
-					
-					else{ // Ambas as acoes nao sao ataques
-						ev1.acao(t1);
-						if (t1.perdeu == true) 
-							break;
-						ev2.acao(t2);
-					}
-				}
-			}
+			ev1 = retornaEvento(opcao1,t1,t2);
+			ev2 = retornaEvento(opcao2,t2,t1);
 			
-			else { // opcao1 > opcao2
-				ev1 = retornaEvento(opcao2);
-				ev2 = retornaEvento(opcao1);
-				
-				if (opcao2 > 3) { // Ambas as acoes sao ataques
-					((Ataca)ev1).acao(t2, t1,opcao2);
-					t1.perdeu();
-					
-					if (t1.perdeu == true) 
-						break;
-					
-					((Ataca)ev2).acao(t1, t2,opcao1);
-					t2.perdeu();
-
-					
-				}
-				else { // opcao2 < 3
-					
-					if(opcao1 > 3){
-						ev1.acao(t2);
-						if (t2.perdeu == true) 
-							break;
-						((Ataca)ev2).acao(t1, t2,opcao1);
-						t2.perdeu();
-						
-					}
-					
-					else{ // Ambas as acoes nao sao ataques
-						ev1.acao(t2);
-						if (t2.perdeu == true) 
-							break;
-						ev2.acao(t1);
-					}
-				}
-			}		
+			rodada.addEvent(ev1);
+			rodada.addEvent(ev2);
+			rodada.run();
+			
 		}
 		
-		sc.close();
-		
+		sc.close();	
+		delay(1000);
+		mp3.close();
+		mp3 = new MP3("Pokemon Victory Theme.mp3");
+		mp3.play();
 		System.out.println();
 		if (t1.perdeu == true)
 			System.out.println(t2.nome + " ganhou!!! Parabens, mestre pokemon!");
 		else
 			System.out.println(t1.nome + " ganhou!!! Parabens, mestre pokemon!");
-			
+		delay(7000);
+		mp3.close();
 	}
 	
 	public static void mostraOpcoes(Treinador t){
@@ -150,34 +103,50 @@ public class BatalhaPokemon {
 	}
 	
 	public static void mostraStatus(Treinador t1, Treinador t2){
+		System.out.println();
+		System.out.println("----------------------------------------------------------------------------------");
 		System.out.println(t1.nome + "		Pokemon: " + t1.pAtivo.nome
-				+ "		Tipo: " + t1.pAtivo.tipoPokemon + "		HP: " + t1.pAtivo.hp);
+				+ "		Tipo: " + t1.pAtivo.tipoPokemon + "		HP: " + t1.pAtivo.hp + "/100");
 		System.out.println(t2.nome + "		Pokemon: " + t2.pAtivo.nome
-				+ "		Tipo: " + t2.pAtivo.tipoPokemon + "		HP: " + t2.pAtivo.hp);
+				+ "		Tipo: " + t2.pAtivo.tipoPokemon + "		HP: " + t2.pAtivo.hp + "/100");
+		System.out.println("----------------------------------------------------------------------------------");
 		System.out.println();
 	}
 	
-	public static Evento retornaEvento(int opcao){
-		if (opcao == 1){
-			Fuga ev = new Fuga();
+	public static Evento retornaEvento(int opcao,Treinador ator, Treinador outro){
+		
+		if (opcao == 0){
+			Captura ev = new Captura(opcao,ator,outro);
+			return ev;
+		}
+		
+		else if (opcao == 1){
+			Fuga ev = new Fuga(opcao,ator,null);
 			return ev;
 		}
 		
 		else if (opcao == 2){
-			Cura ev = new Cura();
+			Cura ev = new Cura(opcao,ator,null);
 			return ev;
 		}
 		
 		else if (opcao == 3){
-			Troca ev = new Troca();
+			Troca ev = new Troca(opcao,ator,null);
 			return ev;
 		}
 		
 		else{
-			Ataca ev = new Ataca();
+			Ataca ev = new Ataca(opcao,ator,outro);
 			return ev;
 		}
 		
 	}
 	
+	public static void delay(int tempo){
+		try {  
+			   Thread.sleep(tempo);  
+			} catch (Exception e) {  
+			   e.printStackTrace();  
+			} 
+	}
 }
