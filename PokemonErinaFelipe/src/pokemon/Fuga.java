@@ -1,8 +1,13 @@
 package pokemon;
 
-public class Fuga implements Evento {
+public class Fuga extends Evento {
 	
-	public void acao(Treinador t){
-		t.fugir();
+	public Fuga(int prioridade, Treinador ator, Treinador outro) {
+		super(prioridade, ator, outro);
+	}
+
+	public void acao(){
+		if (this.ator.perdeu == false && this.outro.perdeu == false)
+			this.ator.fugir();
 	}
 }
