@@ -2,24 +2,33 @@ package pokemon;
 
 import java.util.Scanner;
 
-public class Cura implements Evento {
+public class Cura extends Evento {
 	
-	public void acao(Treinador t) {
-		Scanner sc = new Scanner(System.in);
-		imprimePokemons(t);
-		System.out.print("Digite o numero do pokemon que voce quer curar: ");
-		int num = sc.nextInt() - 1;
-		t.cura(t.pokebola[num]);
-		System.out.println(t.pokebola[num].nome + " foi curado.");
+	public Cura(int prioridade, Treinador ator, Treinador outro) {
+		super(prioridade, ator, outro);
+	}
+
+	public void acao() {
+		if (this.ator.perdeu == false && this.outro.perdeu == false){
+			Scanner sc = new Scanner(System.in);
+			System.out.println();
+			System.out.println(this.ator.nome);
+			imprimePokemons();
+			System.out.print("Digite o numero do pokemon que voce quer curar: ");
+			int num = sc.nextInt() - 1;
+			this.ator.cura(this.ator.pokebola[num]);
+			System.out.println(this.ator.pokebola[num].nome + " foi curado.");
+		}
 	}
 	
-	public static void imprimePokemons(Treinador t) {
+	public void imprimePokemons() {
+		System.out.println("Time Pokemon: ");
+		System.out.println("----------------------------------------------------------------------------------");
 		for(int i = 0; i < 6; i++){
-			if (t.pokebola[i] != null){
-				System.out.println(i + 1 + "..." + t.pokebola[i].nome 
-						+ "... HP:" + t.pokebola[i].hp);
-			}
+			if (this.ator.pokebola[i] != null)
+				System.out.println(i + 1 + ". " + this.ator.pokebola[i].nome + " - HP:" +this.ator.pokebola[i].hp + "/100");
 		}
+		System.out.println("----------------------------------------------------------------------------------");
 		System.out.println();
 	}
 }
