@@ -33,14 +33,8 @@ public class Treinador {
 	public Treinador(String nome) {
 		this.nome = nome;
 
-		Random generator = new Random(System.currentTimeMillis()); // Vezes 10
-																	// porque
-																	// temos 10
-																	// pokemons.
-																	// A funcao
-																	// gera
-																	// numeros
-																	// de 0 a 1
+		Random generator = new Random(System.currentTimeMillis());
+
 		int numPoke = Math.abs(generator.nextInt() % 11);
 
 		if (numPoke == 0)
@@ -76,15 +70,15 @@ public class Treinador {
 	}
 
 	public void cura(Pokemon p) {
-		p.hp += 25;
-		if (p.hp > 100) {
-			p.hp = 100;
+		if (p.hp != 0) {
+			p.hp += 25;
+			if (p.hp > 100)
+				p.hp = 100;
 		}
 	}
 
 	public void trocaPokemon(Pokemon pReserva) {
-		if (this.pAtivo != null)
-			this.pAtivo.ativo = false;
+		this.pAtivo.ativo = false;
 		pReserva.ativo = true;
 		this.pAtivo = pReserva;
 	}
@@ -93,7 +87,7 @@ public class Treinador {
 
 		Pokemon atacante = this.pAtivo;
 		Pokemon atacado = outro.pAtivo;
-		int num = 0; // Somente para o compilador não reclamar
+		int num = 0; // Somente para o compilador nao reclamar
 
 		if (opcao == 4)
 			num = 0;
@@ -144,15 +138,20 @@ public class Treinador {
 
 		if (atacado.hp <= 0) {
 			System.out.println(atacado.nome + " foi nocauteado!");
+			atacado.hp = 0;
+			atacado.nome = atacado.nome + "(Nocauteado)";
 
 			for (int i = 0; i < 6; i++) {
 				if (outro.pokebola[i] == atacado) {
-					outro.pokebola[i] = null;
-					atacado = null;
+					outro.pokebola[i].vivo = false;
+					atacado.vivo = false;
 				}
 			}
-			Troca troca = new Troca();
-			troca.acao(outro);
+			outro.perdeu();
+			if (outro.perdeu == false) {
+				Troca troca = new Troca(0,outro,null);
+				troca.acao();
+			}
 		}
 
 	}
@@ -162,11 +161,12 @@ public class Treinador {
 		boolean possibilidadePerdeu = true;
 		for (int i = 0; i < 6; i++) {
 			if (pokebola[i] != null) {
-				if (pokebola[i].ativo == true) {
+				if (pokebola[i].vivo == true) {
 					possibilidadePerdeu = false;
 				}
 			}
 		}
+
 		if (this.perdeu == false) {
 			this.perdeu = possibilidadePerdeu;
 		}
@@ -174,29 +174,37 @@ public class Treinador {
 
 	public void captura(Treinador t) {
 		if (this.pokebola[5] == null) {
-
+			System.out.println(this.nome + " jogou uma pokebola");
+			BatalhaPokemon.delay(1000);
+			System.out.println("Tu...");
+			BatalhaPokemon.delay(1000);
+			System.out.println("Tu...");
+			BatalhaPokemon.delay(1000);
 			if (Math.random() * 100 > t.pAtivo.hp) {
-				
-				for (int i = 0; i < 5; i++){
-					
-					if(pokebola[i] == null){
+
+				System.out.println("Tu!");
+				BatalhaPokemon.delay(1000);
+				System.out.println("Voce capturou " + t.pAtivo.nome + "!!!");
+
+				for (int i = 0; i < 5; i++) {
+
+					if (pokebola[i] == null) {
 						pokebola[i] = t.pAtivo;
 						break;
 					}
 				}
-					t.pokebola[0] = null;
-					System.out.println("Voce caputurou " + t.pAtivo.nome + "!!!");
-					t.pAtivo.ativo = false;
-					t.perdeu = true;
+				t.pokebola[0] = null;
+				t.pAtivo.ativo = false;
+				t.perdeu = true;
 			}
 
 			// FALHOU
 			else {
-				System.out.println("Voce nao conseguiu capiturar o pokemon");
+				System.out.println("O pokemon escapou da pokebola");
 			}
 		} else
 			System.out
-					.println("Voce nao tem espaco para capiturar esse pokemon");
+					.println("Voce nao tem espaco para capturar esse pokemon");
 
 	}
 }
