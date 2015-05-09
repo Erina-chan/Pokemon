@@ -1,9 +1,17 @@
 package pokemon;
 
-interface Evento {
+abstract public class Evento {
+	
+	int prioridade;
+	Treinador ator;
+	Treinador outro;
 
-	int prioridade = 0;
-	
-	abstract public void acao(Treinador t);
-	
+	public Evento(int prioridade, Treinador ator, Treinador outro) {
+		this.prioridade = prioridade;
+		this.ator = ator;
+		this.outro = outro;
+	}
+
+	abstract public void acao();
+
 }
