@@ -10,5 +10,4 @@ public class Ataca extends Evento{
 		if (this.ator.perdeu == false && this.outro.perdeu == false)
 			this.ator.ataca(this.outro,this.prioridade);
 	}
-	
 }
