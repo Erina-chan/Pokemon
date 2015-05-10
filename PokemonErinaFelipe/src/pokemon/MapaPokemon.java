@@ -97,7 +97,7 @@ public class MapaPokemon {
 		mp3.close();
 		
 		System.out.println();
-		//Cura.imprimePokemons(t1);
+		t1.imprimePokemons();
 		
 		System.out.println();
 		System.out.println("A simulacao acabou!");

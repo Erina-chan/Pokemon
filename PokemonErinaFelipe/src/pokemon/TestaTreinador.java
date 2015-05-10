@@ -26,7 +26,7 @@ public class TestaTreinador {
 	@Test
 	public void testaPerdeu(){
 		assertEquals(t2.perdeu,false);
-		t2.pAtivo.ativo = false;
+		t2.pAtivo.vivo = false;
 		t2.perdeu();
 		assertEquals(t2.perdeu,true);
 		

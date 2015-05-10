@@ -34,11 +34,11 @@ public class BatalhaPokemon {
 		
 		Treinador t2 = new Treinador(nome2, numPokemons2);
 
-		System.out.print("A batalha vai come�ar!");
+		System.out.print("A batalha vai comecar!");
 		mp3.close();
 		mp3 = new MP3("Pokemon Battle Theme.mp3");
 		mp3.play();
-		delay(2000);
+		delay(1000);
 		
 		while(t1.perdeu == false && t2.perdeu == false){
 			
@@ -121,17 +121,17 @@ public class BatalhaPokemon {
 		}
 		
 		else if (opcao == 1){
-			Fuga ev = new Fuga(opcao,ator,null);
+			Fuga ev = new Fuga(opcao,ator,outro);
 			return ev;
 		}
 		
 		else if (opcao == 2){
-			Cura ev = new Cura(opcao,ator,null);
+			Cura ev = new Cura(opcao,ator,outro);
 			return ev;
 		}
 		
 		else if (opcao == 3){
-			Troca ev = new Troca(opcao,ator,null);
+			Troca ev = new Troca(opcao,ator,outro);
 			return ev;
 		}
 		

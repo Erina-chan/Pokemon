@@ -135,25 +135,6 @@ public class Treinador {
 
 		else
 			atacado.hp -= atacante.ataques[num].dano;
-
-		if (atacado.hp <= 0) {
-			System.out.println(atacado.nome + " foi nocauteado!");
-			atacado.hp = 0;
-			atacado.nome = atacado.nome + "(Nocauteado)";
-
-			for (int i = 0; i < 6; i++) {
-				if (outro.pokebola[i] == atacado) {
-					outro.pokebola[i].vivo = false;
-					atacado.vivo = false;
-				}
-			}
-			outro.perdeu();
-			if (outro.perdeu == false) {
-				Troca troca = new Troca(0,outro,null);
-				troca.acao();
-			}
-		}
-
 	}
 
 	public void perdeu() {
@@ -206,5 +187,16 @@ public class Treinador {
 			System.out
 					.println("Voce nao tem espaco para capturar esse pokemon");
 
+	}
+	
+	public void imprimePokemons() {
+		System.out.println("Time Pokemon: ");
+		System.out.println("----------------------------------------------------------------------------------");
+		for(int i = 0; i < 6; i++){
+			if (this.pokebola[i] != null)
+				System.out.println(i + 1 + ". " + this.pokebola[i].nome + " - HP:" +this.pokebola[i].hp + "/100");
+		}
+		System.out.println("----------------------------------------------------------------------------------");
+		System.out.println();
 	}
 }
